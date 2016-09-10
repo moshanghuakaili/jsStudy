@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<script type="text/javascript" src="jquery-1.7.1.min.js"></script>
+		<style type="text/css">
+			body,div,ul{margin:0px;padding:0px;}
+			.content{width:1300px;margin: auto;background: #ccc;margin-top: 50px;position: relative;}
+			@media screen and (max-width: 1400px) {
+    			.content{width:1040px;}
+			}
+			@media screen and (max-width: 1140px) {
+    			.content{width:780px;}
+			}
+			@media screen and (max-width: 880px) {
+    			.content{width:520px;}
+			}
+			
+			.a{width:250px;height:250px;display: block;float:left;background: #abc;position: relative;overflow: hidden;margin:5px;position: absolute;top:0;left:0;}
+			.clearfix:after{clear: both;}
+			.in{width: 100%;height: 100%;background: #aaa;opacity: 0.5;position: absolute;top:520px;pointer-events: none;}
+			.a1{width: 510px;}
+			.a2{height: 510px;}
+		</style>
+	</head>
+	<body>
+	<div class="content">
+		<div class="a a0"><div class="in"></div></div>
+		<div class="a a1"><div class="in"></div></div>
+		<div class="a a1"><div class="in"></div></div>
+		<div class="a a0"><div class="in"></div></div>
+		<div class="a a0"><div class="in"></div></div>
+		<div class="a a2"><div class="in"></div></div>
+		<div class="a a0"><div class="in"></div></div>
+		<div class="a a0"><div class="in"></div></div>
+		<div class="a a0"><div class="in"></div></div>
+		<div class="a a1"><div class="in"></div></div>
+		<div class="a a0"><div class="in"></div></div>
+		<div class="a a0"><div class="in"></div></div>
+		<div class="a a0"><div class="in"></div></div>
+		<div class="a a0"><div class="in"></div></div>
+		<div class="a a0"><div class="in"></div></div>
+		<div class="a a1"><div class="in"></div></div>
+		<div class="a a2"><div class="in"></div></div>
+		<div class="a a0"><div class="in"></div></div>
+		<div class="a a0"><div class="in"></div></div>
+		<div class="a a0"><div class="in"></div></div>
+		<div class="a a0"><div class="in"></div></div>
+		
+	</div>
+	<script type="text/javascript">
+		$(function(){
+			var reset=function(){
+				var off=[0,0];
+				var kong=[];
+				var width=$(".content").width();
+				var flag=0;
+				var transleft=0;
+				$(".content .a").each(function(){
+					var w=$(this).width();
+					var nw=$(this).nextAll(".a:not(.done)").first().width();
+					var h=$(this).height();
+					var done=$(this).attr("class").indexOf("done")
+					
+					if(done==-1){
+						$(this).animate({"top":off[1]+"px","left":off[0]+"px"},500);
+						if(h>260){
+							flag=1;
+							if(off[0]==260){var $done=$(this).nextAll(".a0:not(.p)").first();
+								$done.addClass("done").animate({"top":(off[1]+260)+"px","left":off[0]-260+"px"},500);}
+							if(off[0]==520){
+								var $done=$(this).nextAll(".a0:not(.done)").first();
+								$done.addClass("done").animate({"top":(off[1]+260)+"px","left":off[0]-520+"px"},500);
+								var $done=$done.nextAll(".a0:not(.done)").first();
+								$done.addClass("done").animate({"top":(off[1]+260)+"px","left":off[0]-260+"px"},500);
+							}
+							if(off[0]==780){
+								var $done=$(this).nextAll(".a0:not(.done)").first();
+								$done.addClass("done").animate({"top":(off[1]+260)+"px","left":off[0]-780+"px"},500);
+								var $done=$done.nextAll(".a0:not(.done)").first();
+								$done.addClass("done").animate({"top":(off[1]+260)+"px","left":off[0]-520+"px"},500);
+								var $done=$done.nextAll(".a0:not(.done)").first();
+								$done.addClass("done").animate({"top":(off[1]+260)+"px","left":off[0]-260+"px"},500);
+							}
+							if(off[0]==1040){
+								var $done=$(this).nextAll(".a0:not(.done)").first();
+								$done.addClass("done").animate({"top":(off[1]+260)+"px","left":off[0]-1040+"px"},500);
+								var $done=$(this).nextAll(".a0:not(.done)").first();
+								$done.addClass("done").animate({"top":(off[1]+260)+"px","left":off[0]-780+"px"},500);
+								var $done=$done.nextAll(".a0:not(.done)").first();
+								$done.addClass("done").animate({"top":(off[1]+260)+"px","left":off[0]-520+"px"},500);
+								var $done=$done.nextAll(".a0:not(.done)").first();
+								$done.addClass("done").animate({"top":(off[1]+260)+"px","left":off[0]-260+"px"},500);
+							}
+							transleft=off[0]+w+10;
+							nw=$(this).nextAll(".a:not(.done)").first().width();
+							console.log(transleft,width)
+						}
+						
+						off[0]+=w+10;
+						if(transleft>0&&off[0]>=width){
+							off[0]=transleft;
+							transleft=0;
+							off[1]+=260;
+							flag=1;
+						}
+						if(off[0]>width-nw){
+							if(nw>260&&off[0]<width-200) {
+								var $done=$(this).nextAll(".a0:not(.done)").first();
+								$done.addClass("done").animate({"top":off[1]+"px","left":off[0]+"px"},500);
+							}
+							off[0]=0;
+							off[1]+=260;	
+						}		
+					}
+				})
+
+			}
+			reset()
+				
+			
+			$(".a").mouseover(function(e){
+				var dir=direction(e,$(this))
+				w=$(this).width()
+				h=$(this).height()
+				switch(dir){
+					case 0:
+						$(this).children().css({"left":"-"+w+"px","top":"0px"})
+						$(this).children().animate({"left":"0px"},200)
+						return
+					case 1:
+						$(this).children().css({"left":"0px","top":"-"+h+"px"})
+						$(this).children().animate({"top":"0px"},200)
+						return
+					case 2:
+						$(this).children().css({"left":w+"px","top":"0px"})
+						$(this).children().animate({"left":"0px"},200)
+						return
+					case 3:
+						$(this).children().css({"left":"0px","top":h+"px"})
+						$(this).children().animate({"top":"0px"},200)
+						return
+				}
+			})
+			$(".a").mouseout(function(e){
+				var dir=direction(e,$(this));
+				switch(dir){
+					case 0:
+						$(this).children().animate({"left":"-"+w+"px"},200)
+						return
+					case 1:
+						$(this).children().animate({"top":"-"+h+"px"},200)
+						return
+					case 2:
+						$(this).children().animate({"left":w+"px"},200)
+						return
+					case 3:
+						$(this).children().animate({"top":h+"px"},200)
+						return
+				}
+			})
+			var direction=function(e,$this){
+				var pos=[];
+				pos[0]=$this.offset().left;
+				pos[1]=$this.offset().top;
+				pos[2]=$this.width()+pos[0];
+				pos[3]=$this.height()+pos[1];
+				var off=[];
+				off[0]=Math.abs(e.pageX-pos[0]);
+				off[1]=Math.abs(e.pageY-pos[1]);
+				off[2]=Math.abs(e.pageX-pos[2]);
+				off[3]=Math.abs(e.pageY-pos[3]);
+				var min=off[0];
+				var minindex=0;
+				for(var i=1;i<4;i++){
+					if(off[i]<min){
+						min=off[i];
+						minindex=i;
+					}
+				}
+				return minindex;
+			}
+			})
+	</script>	
+	</body>
+	
+</html>
